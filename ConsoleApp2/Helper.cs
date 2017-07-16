@@ -94,17 +94,10 @@ namespace ConsoleApp2
                 Order[] order1 = InitializeArray<Order>(1);
 
                 order1[0] = new Order
-                {
-
-
-                    //Product = new Product
-                    //{
-                    //Code = "F1-509"
-                    //},
-
+                {                  
                     Code = "F1-509",
                     Price = 49.95,
-                    Deliverydate = "2017-12-29",
+                    Deliverydate = "2017-08-10",
                     Cardmessage = "This is a card message",
                     Specialinstructions = "",
                     OrderTotal = 64.94,

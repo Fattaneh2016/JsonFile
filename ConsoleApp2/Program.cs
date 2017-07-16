@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -23,11 +24,11 @@ namespace ConsoleApp2
             //Console.WriteLine(result.Result.Floristoneservicecharge);
 
             var result = Helper.PlaceOrder();
-            Console.WriteLine(result.Result.OrderNo);
 
+             Console.WriteLine(result.Result.OrderNo.ToString());
+           
 
-
-            Console.ReadLine();
+                Console.ReadLine();
 
            
 
@@ -39,8 +40,8 @@ namespace ConsoleApp2
 
     {
 
-        public int OrderNo { get; set;} 
-        
+        public int OrderNo { get; set; }
+
         public string Code { get; set; }
         public double Price { get; set; }
         public double OrderTotal { get; set; }
@@ -53,10 +54,15 @@ namespace ConsoleApp2
         //public Product Product { get; set; }
         //public CreditCard CreditCard { get; set; }
 
-       
+        public Error OrderErrors { get; set; }
+
 
     }
 
+    public class Error
+    {
+        public List<string> Errors { get; set; }
+    }
     public class Product
     {
 
@@ -263,6 +269,7 @@ namespace ConsoleApp2
         public string Code { get; set; }
     }
 
+   
 }
 
 
