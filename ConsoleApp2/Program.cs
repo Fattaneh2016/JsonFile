@@ -17,63 +17,19 @@ namespace ConsoleApp2
         static void Main(string[] args)
         {
 
-          
 
-            var result = Helper.GetTotalBeforeOrder();
 
-            
+            //var result = Helper.GetTotalBeforeOrder();
+            //Console.WriteLine(result.Result.Floristoneservicecharge);
 
-            Console.WriteLine(result.Result.Floristoneservicecharge);
+            var result = Helper.PlaceOrder();
+            Console.WriteLine(result.Result.OrderNo);
+
+
 
             Console.ReadLine();
 
-            var order1 = new Order
-            {
-                Customer = new Customer
-                {
-                    Address1 = "45014 gardner drive",
-                    Address2 = "",
-                    City = "Alpharetta",
-                    Country = "US",
-                    Email = "fatameri@hotmail.com",
-                    Name = "fattaneh",
-                    Phone = 47025776,
-                    State = "GA",
-                    Zipcode = 30009,
-                    Ip = "1,1,1,1"
-                },
-
-                Product = new Product
-                {
-                    Code = "F1-252"
-                },
-
-                Price = 5.0,
-                Deliverydate = "2017-07-16",
-                Cardmessage = "Hello API",
-                Specialinstructions = "I love you",
-                OrderTotal = 1230,
-                Recipient = new Recipient
-                {
-                    Name = "Fati",
-                    Address1 = "45014 gardner drive",
-                    Address2 = "",
-                    City = "Alpharetta",
-                    Country = "US",
-                    Institution = "freelancer",
-                    Phone = 470257762,
-                    State = "GA",
-                    Zipcode = 30009
-                },
-                CreditCard = new CreditCard
-                {
-                    Ccnum = 1234567891234567,
-                    Cvv2 = 123,
-                    Expmonth = "09",
-                    Expyear = 20,
-                    Type = "Vi"
-                }
-            };
+           
 
         }
     }
@@ -83,36 +39,21 @@ namespace ConsoleApp2
 
     {
 
-        public Product Product { get; set; }
-
-
-
-        public Customer Customer { get; set; }
-
-
-        public Recipient Recipient { get; set; }
-
-
-        public CreditCard CreditCard { get; set; }
-
-
-
+        public int OrderNo { get; set;} 
+        
+        public string Code { get; set; }
         public double Price { get; set; }
-
-
+        public double OrderTotal { get; set; }
+        public string Specialinstructions { get; set; }
         public string Cardmessage { get; set; }
-
-
-
         public string Deliverydate { get; set; }
 
+        public Recipient Recipient { get; set; }
+        //public Customer Customer { get; set; }
+        //public Product Product { get; set; }
+        //public CreditCard CreditCard { get; set; }
 
-        public string Code { get; set; }
-
-        public double OrderTotal { get; set; }
-
-
-        public string Specialinstructions { get; set; }
+       
 
     }
 
@@ -278,28 +219,36 @@ namespace ConsoleApp2
         public double ZipCode { get; set; }
 
     }
-    public class EditListItemActionModel
-    {
-
-        public int Id { get; set; }
-        public int State { get; set; }
-
-        public string Prefix { get; set; }
-        public string Index { get; set; }
-        public string ParentId { get; set; }
-
-        //Id = 1,
-        //State = 26,
-        //Prefix = "f",
-        //Index = "oo",
-        //ParentID = null
-    }
+   
 
 
     public class RECIPIENT
     {
         [JsonProperty("ZIPCODE")]
         public string Zipcode { get; set; }
+
+        [JsonProperty("PHONE")]
+        public int Phone { get; set; }
+        [JsonProperty("ADDRESS2")]
+        public string Address2 { get; set; }
+
+        [JsonProperty("STATE")]
+        public string State { get; set; }
+
+        [JsonProperty("ADDRESS1")]
+        public string Address1 { get; set; }
+
+        [JsonProperty("NAME")]
+        public string Name { get; set; }
+
+        [JsonProperty("COUNTRY")]
+        public string Country { get; set; }
+
+        [JsonProperty("INSTITUTION")]
+        public string Institution { get; set; }
+
+        [JsonProperty("CITY")]
+        public string City { get; set; }
     }
 
     public class RootObject
