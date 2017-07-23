@@ -13,7 +13,140 @@ namespace ConsoleApp2
    public static class Helper
     {
 
+        public static async Task<AllProducts> GetSingleProduct(string code)
+
+        {
+
+            try
+            {
+                var url = "https://www.floristone.com/api/rest/flowershop/getproducts?code=" + code;
+                HttpClient client = await AuthenticateHelper.GetClient();
+                var response = await client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.Assert(true);
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                var deserialized = JsonConvert.DeserializeObject<AllProducts>(content);
+                return deserialized;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }
+        }
+
+        public static void Addcart()
+
+        {
+            
+                switch (CartItem.CartExist)
+                {
+                    case true:
+                        var all = ShoppingCartItems("F1-252");
+                        //await DisplayAlert("all.Status", all.Status.ToString(), "", "Ok");
+
+                        break;
+                    default:
+                        CartItem.CartExist = false;
+                        var resp =  AddNewCartItem();
+                        CartItem.CartSessionId = resp.Result.SessionId;
+
+                   
+                        var allp = ShoppingCartItems("F1-252");
+                        Console.WriteLine(allp.Status.ToString());
+
+                    //await DisplayAlert("all.Status", allp.Status.ToString(), "", "Ok");
+
+                    //await DisplayAlert("Add to cart", "Flower is added to cart", "Ok");
+                    //await DisplayAlert("added ", resp.Status, "Ok", "Cancel");
+                    CartItem.CartExist = true;
+                        break;
+
+                }
+                //CartId.Text = CartItem.CartSessionId;
+                //await Navigation.PushAsync( new MainTabPage());
+            
+        }
+
+
+        public static async Task<CartItem> AddNewCartItem()
+        {
+            var url = "https://www.floristone.com/api/rest/shoppingcart";
+            var client = await AuthenticateHelper.GetClient();
+            var mycart = new CartItem();
+
+
+            var response = await client.PostAsync(url,
+                new StringContent(JsonConvert.SerializeObject(mycart),
+                    Encoding.UTF8, "application/json"));
+            return JsonConvert.DeserializeObject<CartItem>(await response.Content.ReadAsStringAsync());
+        }
+
        
+
+        public static async Task ShoppingCartItems(string productcode)
+        {
+            try
+            {
+                //https://www.floristone.com/api/rest/shoppingcart?sessionid"
+                var client = await AuthenticateHelper.GetClient();
+                //TODO: use Put to Add a cartitem
+                var cartItem = new CartItem
+                {
+                    SessionId = CartItem.CartSessionId,
+                    CartItems = new List<string>(new[] { productcode }),
+                    Action = "add",
+                    Quantity = 1
+                };
+                string url = "https://www.floristone.com/api/rest/shoppingcart?sessionid=" + CartItem.CartSessionId + "&productcode=" + productcode + "&action=add";
+                var response = await client.PutAsync(url, new StringContent(
+                    JsonConvert.SerializeObject(cartItem),
+                    Encoding.UTF8, "application/json"));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.Assert(true);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                throw;
+            }
+
+        }
+
+        public static async Task<CartItem> GetShoppingCart(string sessionId)
+
+        {
+            try
+            {
+                HttpClient client = await AuthenticateHelper.GetClient();
+                string url = "https://www.floristone.com/api/rest/shoppingcart?sessionid=" + sessionId;
+
+                var response = await client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.Assert(true);
+                }
+                var content = await response.Content.ReadAsStringAsync();
+                if (content == null)
+                {
+                    throw new ArgumentNullException(nameof(content));
+                }
+                var deserialized = JsonConvert.DeserializeObject<CartItem>(content);
+                return deserialized;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                throw;
+            }
+        }
 
 
         public static async Task<GetTotal>  GetTotalBeforeOrder()
@@ -100,7 +233,7 @@ namespace ConsoleApp2
                     Deliverydate = "2017-08-10",
                     Cardmessage = "This is a card message",
                     Specialinstructions = "",
-                    OrderTotal = 64.94,
+                    
                     Recipient = new Recipient
                     {
                         Name = "Phil FloristOne",
@@ -156,7 +289,7 @@ namespace ConsoleApp2
                 //Console.WriteLine(uri);
                 //Console.ReadLine();
 
-                var placeOrderUrl = "https://www.floristone.com/api/rest/flowershop/placeorder?products="+ uriOrder +"&customer=" + uriCustomer +"&ccinfo=" + uricard;
+                var placeOrderUrl = "https://www.floristone.com/api/rest/flowershop/placeorder?products="+ uriOrder +"&customer=" + uriCustomer +"&ccinfo=" + uricard + "&OrderTotal=" + 64.94;
 
                 var response = await client.PostAsync(placeOrderUrl,
                     new StringContent(JsonConvert.SerializeObject(order1),

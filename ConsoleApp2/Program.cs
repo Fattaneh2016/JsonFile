@@ -18,22 +18,43 @@ namespace ConsoleApp2
         static void Main(string[] args)
         {
 
-
+            Helper.Addcart();
 
             //var result = Helper.GetTotalBeforeOrder();
             //Console.WriteLine(result.Result.Floristoneservicecharge);
 
-            var result = Helper.PlaceOrder();
+            //var result = Helper.PlaceOrder();
+            //Console.WriteLine(result.Result.OrderNo.ToString());
+            //Console.ReadLine();
 
-             Console.WriteLine(result.Result.OrderNo.ToString());
+
+            //var result = Helper.GetShoppingCart(CartItem.CartSessionId);
+
+
+            //Console.WriteLine((CartItem.CartSessionId));
+            //Console.WriteLine(result.Result.Products.Count);
+            //Console.WriteLine(result.Result.ProductCount);
+            //Console.ReadLine();
+
+
            
+            var resultOneProduct =  Helper.GetSingleProduct("F1-252");
 
-                Console.ReadLine();
+            foreach (var cartitem in resultOneProduct.Result.Products)
+            {
 
-           
+
+                Console.WriteLine(cartitem.Code);
+                Console.WriteLine(cartitem.Description);
+                Console.WriteLine(cartitem.Price);
+            }
+            Console.ReadLine();
+
+        }
 
         }
     }
+
 
 
     public class Order
@@ -63,9 +84,11 @@ namespace ConsoleApp2
     {
         public List<string> Errors { get; set; }
     }
-    public class Product
+
+    public  class Product
     {
 
+        [JsonProperty("CODE")]
         public string Code { get; set; }
 
 
@@ -195,9 +218,9 @@ namespace ConsoleApp2
         [JsonProperty("FLORISTONESERVICECHARGE")]
         public double Floristoneservicecharge { get; set; }
 
-       
 
-       
+
+
         //"FLORISTONESERVICECHARGE": 14.99,
         //"SUBTOTAL": 39.95,
         //"FLORISTONETAX": 0,
@@ -225,7 +248,7 @@ namespace ConsoleApp2
         public double ZipCode { get; set; }
 
     }
-   
+
 
 
     public class RECIPIENT
@@ -235,6 +258,7 @@ namespace ConsoleApp2
 
         [JsonProperty("PHONE")]
         public int Phone { get; set; }
+
         [JsonProperty("ADDRESS2")]
         public string Address2 { get; set; }
 
@@ -269,8 +293,51 @@ namespace ConsoleApp2
         public string Code { get; set; }
     }
 
-   
-}
+
+    public class AllProducts
+
+    {
+        [JsonProperty("TOTAL")]
+        public int Total { get; set; }
+
+        [JsonProperty("PRODUCTS")]
+        public List<Product> Products { get; set; }
+
+    }
+
+    public class CartItem
+    {
+        public static string CartSessionId { get; set; }
+        public static bool CartExist { get; set; }
+        public static bool AddToCartVisible { get; set; }
+
+
+        [JsonProperty("SESSIONID")]
+        public string SessionId { get; set; }
+
+        [JsonProperty("STATUS")]
+        public string Status { get; set; }
+
+        [JsonProperty("ACTION")]
+        public string Action { get; set; }
+
+        [JsonProperty("QUANTITY")]
+        public int Quantity { get; set; }
+
+        //the virtual keyword allows you to override the property in sub-classes       
+        [JsonProperty("PRODUCTS")]
+        public List<Product> Products { get; set; }
+
+
+       
+
+        [JsonProperty("PRODUCTCOUNT")]
+        public int ProductCount { get; set; }
+
+        [JsonProperty("CARTITEMS")]
+        public List<string> CartItems { get; set; }
+
+    }
 
 
 
